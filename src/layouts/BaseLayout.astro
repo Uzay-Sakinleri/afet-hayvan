@@ -12,14 +12,18 @@ const { title, h1text } = Astro.props;
     <title>{title}</title>
   </head>
   <body class="font-sans">
-    <nav class="flex justify-between items-center py-5 mx-3 text-xl mt-5">
+    <nav
+      class="flex justify-between items-center py-5 text-xl mt-5 border-black border-b-2 w-[100%]"
+    >
       <header>
         <h2 class="text-bold pl-5 hover:font-extrabold">
           <a href="#">Afet Hayvan</a>
         </h2>
       </header>
       <ul class="[&>li]:inline-block [&>li]:px-10 [&>li]:py-35">
-        <li class="hover:font-bold font-bold"><a href="#">İlanlar</a></li>
+        <li class="hover:font-bold">
+          <a href="#">İlanlar</a>
+        </li>
         <li class="hover:font-bold">
           <button class="border border-black p-3 bg-[#9DD4AB] rounded-[6%]"
             ><a href="#">Giriş</a></button
