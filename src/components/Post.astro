@@ -1,0 +1,42 @@
+---
+import { Post } from "../interfaces/Post";
+import { Image } from "@astrojs/image/components";
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+---
+
+<section>
+  <Image
+    src={import(/* @vite-ignore */ post.animal.imagePath)}
+    class="object-fill"
+    width={400}
+    height={400}
+    alt="Image of an animal"
+  />
+  <article
+    class="border border-black [&>div>label]:font-extrabold [&>div]:py-1 [&>div>label]:pl-2"
+  >
+    <h2 class="font-extrabold text-xl text-center">{post.name}</h2>
+    <div class="w-full h-auto border-black border-b border-t">
+      <label for="animalname" class="inline-block mr-5">İsmi:</label>
+      <p id="animalname" class="inline-block">{post.animal.name}</p>
+    </div>
+    <div class="w-full h-auto border-b border-b-black">
+      <label for="creationdate" class="inline-block mr-5">Açılma Tarihi:</label>
+      <p id="creationdate" class="inline-block">{post.createdAt}</p>
+    </div>
+    <div class="w-full h-auto border-b border-b-black">
+      <label for="status" class="inline-block mr-5">Durumu:</label>
+      <p id="status" class="inline-block">{post.status}</p>
+    </div>
+    <div class="flex content-center">
+      <button
+        class="border border-black m-auto bg-purple-500 text-white hover:font-extrabold"
+        ><a href="#">Detaya git</a>
+      </button>
+    </div>
+  </article>
+</section>
