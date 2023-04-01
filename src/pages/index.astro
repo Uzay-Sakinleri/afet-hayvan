@@ -1,5 +1,12 @@
 ---
+import Post from "../components/Post.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout h1text={"İlanlar"} title={"İlanlar"} />
+<BaseLayout h1text={"İlanlar"} title={"İlanlar"}>
+  <div
+    class="grid gap-6 grid-rows-auto grid-cols-3 w-[80%] h-[auto] justify-items-center m-auto py-10"
+  >
+    <!-- <Post /> -->
+  </div>
+</BaseLayout>
