@@ -8,7 +8,7 @@ import { Image } from "@astrojs/image/components";
 const { post } = Astro.props;
 ---
 
-<section>
+<section class="border-inherit">
   <Image
     src={import(/* @vite-ignore */ post.imagePath)}
     class="object-fill"
@@ -36,9 +36,9 @@ const { post } = Astro.props;
       <h3 class="inline-block mr-5">Durumu</h3>
       <p id="status" class="inline-block">{post.status}</p>
     </div>
-    <div class="flex content-center">
+    <div class="flex content-center border-inherit">
       <button
-        class="border border-black m-auto bg-purple-500 text-white hover:font-extrabold"
+        class="border border-inherit m-auto bg-purple-500 text-white hover:font-extrabold"
         ><a href="#">Detaya git</a>
       </button>
     </div>
