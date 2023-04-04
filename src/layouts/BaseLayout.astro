@@ -1,4 +1,5 @@
 ---
+import { Image } from "@astrojs/image/components";
 const { title, h1text } = Astro.props;
 ---
 
@@ -11,7 +12,7 @@ const { title, h1text } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body class="font-sans text-lg">
+  <body class="font-sans text-lg bg-[#EDECDF]">
     <nav
       class="flex justify-between items-center py-5 text-xl mt-5 border-black border-b-2 w-[100%]"
     >
@@ -35,6 +36,38 @@ const { title, h1text } = Astro.props;
       <h1 class="text-center text-3xl mt-5">{h1text}</h1>
       <slot />
     </main>
-    <footer></footer>
+    <footer class="border-black border-t-2 mb-5">
+      <h2 class="text-center text-2xl font-bold my-3">Ekstra Kaynaklar</h2>
+      <section id="foot-info" class="flex justify-around">
+        <article>
+          <h3 class="mb-5 font-bold text-2xl">Afet Yardım Haritaları</h3>
+          <a href="https://afetharita.com/">
+            <figure
+              class="block border-black border w-[50%] hover:border-blue-400"
+            >
+              <Image
+                src={import(
+                  /* @vite-ignore */ "../images/static/map-afetharita.jpg"
+                )}
+                alt="Map from afetharita.com"
+                class="mx-auto mb-3 mt-0"
+              />
+              <figcaption class="text-center">Afet Harita</figcaption>
+            </figure>
+          </a>
+        </article>
+        <article>
+          <h3 class="mb-10 font-extrabold text-2xl">Linkler</h3>
+          <ul class="my-auto [&>li]:my-3 [&>li]:w-40">
+            <li><a href="" class="hover:font-semibold">Yararlı Linkler</a></li>
+            <li><a href="" class="hover:font-semibold">Çerez Politikası</a></li>
+            <li>
+              <a href="" class="hover:font-semibold">Gizlilik Sözleşmesi</a>
+            </li>
+            <li><a href="" class="hover:font-semibold">Aydınlatma Metni</a></li>
+          </ul>
+        </article>
+      </section>
+    </footer>
   </body>
 </html>
