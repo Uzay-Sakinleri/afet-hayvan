@@ -1,8 +1,8 @@
-export interface Post {
+export interface Thumbnail {
     postId: number;
     name: string;
     username: string;
-    animalname: string;
+    animalName: string;
     imagePath: string;
     createdAt: Date;
     completedAt?: Date;

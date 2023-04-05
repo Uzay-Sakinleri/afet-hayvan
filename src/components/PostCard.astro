@@ -1,35 +1,39 @@
 ---
-import { Post } from "../interfaces/Post";
+import { Thumbnail } from "../interfaces/Thumbnail";
 import { Image } from "@astrojs/image/components";
-interface Props {
-  post: Post;
-}
+// interface Props {
+//   post: Thumbnail;
+// }
 
 const { post } = Astro.props;
 ---
 
 <section>
   <Image
-    src={import(/* @vite-ignore */ post.animal.imagePath)}
+    src={import(/* @vite-ignore */ post.imagePath)}
     class="object-fill"
     width={400}
     height={400}
     alt="Image of an animal"
   />
   <article
-    class="border border-black [&>div>label]:font-extrabold [&>div]:py-1 [&>div>label]:pl-2"
+    class="border border-black [&>div>h3]:font-extrabold [&>div]:py-1 [&>div>h3]:pl-2"
   >
     <h2 class="font-extrabold text-xl text-center">{post.name}</h2>
     <div class="w-full h-auto border-black border-b border-t">
-      <label for="animalname" class="inline-block mr-5">İsmi:</label>
-      <p id="animalname" class="inline-block">{post.animal.name}</p>
+      <h3 class="inline-block mr-5">İlan Sahibi</h3>
+      <p id="username" class="inline-block">{post.username}</p>
+    </div>
+    <div class="w-full h-auto border-black border-b">
+      <h3 class="inline-block mr-5">İsmi</h3>
+      <p id="animalname" class="inline-block">{post.animalName}</p>
     </div>
     <div class="w-full h-auto border-b border-b-black">
-      <label for="creationdate" class="inline-block mr-5">Açılma Tarihi:</label>
+      <h3 class="inline-block mr-5">Açılma Tarihi</h3>
       <p id="creationdate" class="inline-block">{post.createdAt}</p>
     </div>
     <div class="w-full h-auto border-b border-b-black">
-      <label for="status" class="inline-block mr-5">Durumu:</label>
+      <h3 class="inline-block mr-5">Durumu</h3>
       <p id="status" class="inline-block">{post.status}</p>
     </div>
     <div class="flex content-center">
