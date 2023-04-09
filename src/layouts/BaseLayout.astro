@@ -12,10 +12,15 @@ const { title, h1text } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <script>
+      import "../js/changeModeAuto";
+    </script>
   </head>
-  <body class="font-sans text-lg bg-[#EDECDF] border-black">
+  <body
+    class="font-sans text-lg bg-[#EDECDF] dark:bg-[#242423] dark:text-white dark:border-white border-black"
+  >
     <button type="button" class="pl-[50vw] bg-none border-0" id="icon-btn">
-      <i class="fa-regular fa-sun text-3xl" id="change-mode-icon"></i></button
+      <i id="change-mode-icon"></i></button
     >
     <nav
       class="flex justify-between items-center py-5 text-xl mt-5 border-inherit border-b-2 w-[100%]"
@@ -75,7 +80,7 @@ const { title, h1text } = Astro.props;
       </section>
     </footer>
     <script>
-      import "../js/changeMode";
+      import "../js/changeModeManual";
     </script>
   </body>
 </html>
