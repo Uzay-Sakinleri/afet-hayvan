@@ -1,3 +1,4 @@
+// TODO: Refactor into typescript, remove require pool instances, import interfaces into const calls on functions
 import { Pool } from 'pg'
 
 /**
