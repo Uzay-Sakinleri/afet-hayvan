@@ -1,4 +1,5 @@
 ---
+import "../../public/fonts/fontawesome-icons/css/all.css";
 import { Image } from "@astrojs/image/components";
 const { title, h1text } = Astro.props;
 ---
@@ -11,10 +12,18 @@ const { title, h1text } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <script>
+      import "../js/changeModeAuto";
+    </script>
   </head>
-  <body class="font-sans text-lg bg-[#EDECDF]">
+  <body
+    class="font-sans text-lg bg-[#EDECDF] dark:bg-[#242423] dark:text-white dark:border-white border-black"
+  >
+    <button type="button" class="pl-[50vw] bg-none border-0" id="icon-btn">
+      <i id="change-mode-icon"></i></button
+    >
     <nav
-      class="flex justify-between items-center py-5 text-xl mt-5 border-black border-b-2 w-[100%]"
+      class="flex justify-between items-center py-5 text-xl mt-5 border-inherit border-b-2 w-[100%]"
     >
       <header>
         <h2 class="text-bold pl-5 hover:font-extrabold">
@@ -26,24 +35,25 @@ const { title, h1text } = Astro.props;
           <a href="#">İlanlar</a>
         </li>
         <li class="hover:font-bold">
-          <button class="border border-black p-3 bg-[#9DD4AB] rounded-[6%]"
-            ><a href="#">Giriş</a></button
+          <button
+            class="border border-black p-3 bg-[#9DD4AB] rounded-[6%] w-20"
+            id="login-btn"><a href="#">Giriş</a></button
           >
         </li>
       </ul>
     </nav>
-    <main>
+    <main class="border-inherit">
       <h1 class="text-center text-3xl mt-5">{h1text}</h1>
       <slot />
     </main>
-    <footer class="border-black border-t-2 mb-5">
+    <footer class="border-inherit border-t-2 mb-5">
       <h2 class="text-center text-2xl font-bold my-3">Ekstra Kaynaklar</h2>
       <section id="foot-info" class="flex justify-around">
         <article>
           <h3 class="mb-5 font-bold text-2xl">Afet Yardım Haritaları</h3>
           <a href="https://afetharita.com/">
             <figure
-              class="block border-black border w-[50%] hover:border-blue-400"
+              class="block border-inherit border w-[50%] hover:border-blue-400"
             >
               <Image
                 src={import(
@@ -69,5 +79,8 @@ const { title, h1text } = Astro.props;
         </article>
       </section>
     </footer>
+    <script>
+      import "../js/changeModeManual";
+    </script>
   </body>
 </html>
