@@ -1,5 +1,6 @@
-import { Pool } from 'pg'
+import { Pool, QueryResult } from 'pg'
 import { Animal } from './interfaces/Animal';
+import { User } from './interfaces/User';
 import { Post } from './interfaces/Post';
 const pool = new Pool();
 
@@ -8,74 +9,62 @@ const pool = new Pool();
  * @returns Row values representing Animal interface with the given animalid
  */
 
-async function getAnimal(animalid):Promise<Animal> {
+export async function getAnimal(animalid: number): Promise<Animal | null> {
     // Create Pool in order to execute queries
-    let Animal:Animal;
+    const query = {
+        text: 'SELECT * FROM animals JOIN appearence JOIN furcolors JOIN eyecolors JOIN breeds JOIN species WHERE animalid = $1',
+        values: [animalid],
+    };
+    let animal:Animal;
 
     // Executing query for getting variables from row of animals
-    pool.query('SELECT * FROM animals WHERE animalid = $1', [animalid], (err, res) => {
+    pool.query(query, (err, res:QueryResult<any>) => {
         if (err) {
-            throw err;
+            console.error(err);
+            return null;
         }
         animal.name = res.rows[0].name;
         animal.imagePath = res.rows[0].path;
         animal.appearance.appearanceId = res.rows[0].appearenceid;
         animal.breed.breedId = res.rows[0].breedid;
         animal.specie.specieId = res.rows[0].specieid;
-    })
-
-    // Executing query for getting variables from row of appearence
-    pool.query('SELECT * FROM appearence WHERE appearence = $1', [animal.appearance.appearanceId], (err, res) => {
-        if (err) {
-            throw err;
-        }
         animal.appearance.furColor.furColorId = res.rows[0].furcolorid;
         animal.appearance.eyeColor.eyeColorId = res.rows[0].eyecolorid;
-        animal.appearance.accessory = res.rows[0].accessory;
-    })
-
-    // Executing query for getting variables from row of furcolors
-    pool.query('SELECT * FROM furcolors JOIN eyecolors ON furcolorid = $1 AND eyecolorid = $2', [animal.appearance.furColor.furColorId, animal.appearance.eyeColor.eyeColorId], (err, res) => {
-        if (err) {
-            throw err;
-        }
+        animal.appearance.accesory = res.rows[0].accessory;
         animal.appearance.furColor.name = res.rows[0].furcolor;
         animal.appearance.furColor.name = res.rows[0].eyecolor;
-    })
-
-    // Executing query for getting variables from row of eyecolors
-    pool.query('SELECT * FROM breeds JOIN species ON breedid = $1 AND specieid = $2', [animal.breed.breedId, animal.specie.specieId], (err, res) => {
-        if (err) {
-            throw err;
-        }
         animal.breed.brName = res.rows[0].brname;
         animal.specie.speName = res.rows[0].spename;
     })
     pool.end();
-    return animal as Animal;
+    return animal;
 }
 
 /**
  * @param {Number} userid - Id of the user to be returned
  * @returns Row values representing User interface with the given userid
  */
-async function getUser(userid) {
+export async function getUser(userid:number):Promise<User|null> {
     // Create Pool in order to execute queries
-    const { Pool } = require('pq');
-    const pool = new Pool();
-    const user = { userId: userid, name: '', surname: '', phone: 0, email: '', password: '', role: ''};
+    const query = {
+        text: 'SELECT * FROM users WHERE userid = $1',
+        values: [userid],
+    };
+    let user:User;
+    user.userId = userid;
 
     // Executing query for getting variables from row of users
-    pool.query('SELECT * FROM users WHERE userid = $1', [userid], (err, res) => {
+    pool.query(query, (err:Error, res:QueryResult<any>) => {
         if (err) {
-            throw err;
+            console.error(err);
+            return null;
         }
-        user.name = res.row[0].name;
-        user.surname = res.row[0].surname;
-        user.phone = res.row[0].phonenumber;
-        user.email = res.row[0].email;
-        user.password = res.row[0].password;
-        user.role = res.row[0].role;
+        user.name = res.rows[0].name;
+        user.surname = res.rows[0].surname;
+        user.phone = res.rows[0].phonenumber;
+        user.email = res.rows[0].email;
+        user.password = res.rows[0].password;
+        user.role = res.rows[0].role;
     })
     pool.end();
     return user;
@@ -86,18 +75,21 @@ async function getUser(userid) {
  * @returns Row values representing Post interface with the given postid
  */
 
-async function getPost(postid) {
+export async function getPost(postid: number): Promise<Post|null> {
     // Create Pool in order to execute queries
-    const { Pool } = require('pq');
-    const pool = new Pool();
+    const query = {
+        text: 'SELECT * FROM posts WHERE postid = $1',
+        values: [postid],
+    };
     let userid = 0;
     let animalid = 0;
     let post:Post;
 
     // Executing query for getting variables from row of posts
-    pool.query('SELECT * FROM posts WHERE postid = $1', [postid], (err, res) => {
+    pool.query(query, (err:Error, res:QueryResult<any>) => {
         if (err) {
-            throw err;
+            console.error(err);
+            return null;
         }
         post.name = res.rows[0].name;
         userid = res.rows[0].userid;
@@ -117,44 +109,45 @@ async function getPost(postid) {
 /**
  * @returns All the thumbnails of the posts in the main page
  */
-async function getAllThumbnails() {
+export async function getAllThumbnails(): Promise<null> {
     // Create Pool in order to execute queries
-    const { Pool } = require('pq')
-    const pool = new Pool()
+    const query = {
+        text: 'SELECT postid, posts.name AS name, users.name AS username, animals.name AS animalname, animals.path AS imagePath, createdAt, completedAt, status FROM users NATURAL JOIN posts NATURAL JOIN animals',
+    };
 
     // Executing query for getting values from users, posts and animals related to thumbnail interface
-    pool.query('SELECT postid, posts.name AS name, users.name AS username, animals.name AS animalname, animals.path AS imagePath, createdAt, completedAt, status FROM users NATURAL JOIN posts NATURAL JOIN animals', (err, res) => {
+    pool.query(query, (err, res) => {
         if (err) {
-            throw err;
+            console.error(err);
+            return null;
         }
         pool.end();
         return res.rows
     })
+    return null;
 }
 
-async function updateUser(user){
+export async function updateUser(user: User): Promise<null> {
     // Create Pool in order to execute queries
-    const { Pool } = require('pq')
-    const pool = new Pool()
     const query = {
         text: 'UPDATE users SET name = $1, surname = $2, phonenumber = $3, email = $4, password = $5, role = $6 WHERE userid = $7',
         values: [user.name, user.surname, user.phone, user.email, user.password, user.role, user.userId],
     };
 
     // Executing query for updating the values of the user with userid
-    pool.query(query, (err, res) => {
+    pool.query(query, (err:Error, res:QueryResult<any>) => {
         if (err) {
-            throw err;
+            console.error(err);
+            return null;
         }
         console.log('User with ID ${user.userId} updates with new values.');
-        pool.end();
     })
+    pool.end();
+    return null;
 }
 
-async function updateAnimal(animal){
+export async function updateAnimal(animal: Animal): Promise<null> {
     // Create Pool in order to execute queries
-    const { Pool } = require('pq')
-    const pool = new Pool()
     const query = {
         text: 'UPDATE animals SET name = $1, path = $2, breedid = $3, specieid = $4 WHERE animalid = $5',
         values: [animal.name, animal.imagePath, animal.breed.breedId, animal.specie.specieId, animal.animalId],
@@ -162,104 +155,133 @@ async function updateAnimal(animal){
     
     // TODO: need to make design decisions about how to handle furcolors, eyecolors, breeds and species to update
     // Executing query for updating the values of the animal with animalid
-    pool.query(query, (err, res) => {
+    pool.query(query, (err:Error, res:QueryResult<any>) => {
         if (err) {
-            throw err;
+            console.error(err);
+            return null;
         }
-        console.log('Animal with ID ${animal.animalId} updates with new values.');
+        console.log('Animal with ID ${animal.animalId} updated with new values.');
     })
 
     query.text = 'UPDATE appearences SET furcolorid = $1, eyecolorid = $2, accessory = $3 WHERE appearenceid = $4';
-    query.values = [animal.appearance.furcolor.furColorId, animal.appearance.eyecolor.eyeColorId, animal.appearance.accessory, animal.appearance.appearanceId]
+    query.values = [animal.appearance.furColor.furColorId, animal.appearance.eyeColor.eyeColorId, animal.appearance.accesory, animal.appearance.appearanceId]
 
+    // Executing query for updating the values of the appearence with appearenceid
+    pool.query(query, (err:Error, res:QueryResult<any>) => {
+        if (err) {
+            console.error(err);
+            return null;
+        }
+        console.log('Appearence with ID ${animal.appearance.appearanceId} updated with new values.');
+    })
     pool.end();
+    return null;
 }
 
-async function updatePost(post){
+export async function updatePost(post: Post): Promise<null> {
     // Create Pool in order to execute queries
-    const { Pool } = require('pq')
-    const pool = new Pool()
     const query = {
         text: 'UPDATE posts SET name = $1, completedAt = $2, status = $3 WHERE postid = $4',
         values: [post.name, post.completedAt,post.status, post.postId],
     };
 
     // Executing query for updating the values of the post with postid
-    pool.query(query, (err, res) => {
+    pool.query(query, (err:Error, res:QueryResult<any>) => {
         if (err) {
-            throw err;
+            console.error(err);
+            return null;
         }
         console.log('Post with ID ${post.postId} updates with new values.');
         pool.end();
     })
+    return null;
 }
 
-async function insertAnimal(animal){
+export async function insertAnimal(animal: Animal): Promise<number | null> {
+
     // Create Pool in order to execute queries
-    const { Pool } = require('pq')
-    const pool = new Pool()
-    const query = {
+    let query = {
         text: 'INSERT INTO appearance (furcolorid, eyecolorid, accessories) VALUES ($1, $2, $3) RETURNING appearanceid',
-        values: [animal.appearance.furColor.furColorId, animal.appearance.eyeColor.eyeColorId, animal.appearance.accessory],
+        values: [animal.appearance.furColor.furColorId, animal.appearance.eyeColor.eyeColorId, animal.appearance.accesory],
     };
+    let animalid:number = 0;
+    let appearanceid:number = 0;
 
     // Executing query for inserting the new values of the appearance
-    pool.query(query, (err, res) => {
+    pool.query(query, (err:Error, res:QueryResult<any>) => {
         if (err) {
-            throw err;
+            console.error(err);
+            return null;
         }
-        console.log('Appearance with ID ${res.rows[0].appearanceid} inserted.');
+        appearanceid = res.rows[0].appearanceid;
+        console.log('Appearance with ID ${appearanceid} inserted.');
     })
 
     query.text = 'INSERT INTO animals (name, appearanceid, path, breedid, specieid) VALUES ($1, $2, $3, $4, $5) RETURNING animalid';
-    query.values = [animal.name, res.rows[0].appearanceid, animal.imagePath, animal.breed.breedId, animal.specie.specieId]
+    query.values = [animal.name, appearanceid, animal.imagePath, animal.breed.breedId, animal.specie.specieId]
     // Executing query for inserting the new values of the animal
-    pool.query(query, (err, res) => {
+    pool.query(query, (err: Error, res:QueryResult<any>) => {
         if (err) {
-            throw err;
+            console.error(err);
+            return null;
         }
-        console.log('Animal with ID ${res.rows[0].animalid} inserted.');
-        pool.end();
-        return res.rows[0].animalid;
+        animalid = res.rows[0].animalid
+        console.log('Animal with ID ${animalid} inserted.');
     })
+    pool.end();
+    return animalid;
 }
 
-async function insertUser(user){
-    // Create Pool in order to execute queries
-    const { Pool } = require('pq')
-    const pool = new Pool()
+/**
+ * Inserts the input user into the database, on error returns null instead of userID.
+ * @param {User} user - The first parameter, a number.
+ * @returns {Promise<number | null>} ID of the inserted user.
+ */
+export async function insertUser(user: User): Promise<number | null> {
+    
+    // Creating variables for queries to be executed and userid to be returned
     const query = {
         text: 'INSERT INTO users (name, surname, phonenumber, email, password, role) VALUES ($1, $2, $3, $4, $5, $6) RETURNING userid',
         values: [user.name, user.surname, user.phone, user.email, user.password, user.role],
     };
+    let userid: number = 0;
 
-    // Executing query for inserting the new values of the user
-    pool.query(query, (err, res) => {
+    // Executing query for inserting the new values into user
+    pool.query(query, (err:Error, res:QueryResult<any>) => {
         if (err) {
-            throw err;
+            console.error(err);
+            return null;
         }
-        console.log('User with ID ${res.rows[0].userid} inserted.');
-        pool.end();
-        return res.rows[0].userid;
+        userid = res.rows[0].userid
+        console.log('User with ID ${userid} inserted.');
     })
+    pool.end();
+    return userid;
 }
 
-async function insertPost(post){
-    // Create Pool in order to execute queries
-    const { Pool } = require('pq')
-    const pool = new Pool()
+/**
+ * Inserts the input post into the database, on error returns null instead of postID.
+ * @param {Post} post - The first parameter, a number.
+ * @returns {Promise<number | null>} ID of the inserted post.
+ */
+export async function insertPost(post: Post): Promise<number | null> {
+    
+    // Creating variables for queries to be executed and postid to be returned
     const query = {
         text: 'INSERT INTO posts (name, userid, animalid, createdat, completedat, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING postid',
         values: [post.name, post.user.userId, post.animal.animalId, post.createdAt, post.completedAt, post.status],
     };
+    let postid:number = 0;
 
-    // Executing query for inserting the new values of the post
-    pool.query(query, (err, res) => {
+    // Executing query for inserting the new values into post
+    pool.query(query, (err:Error, res: QueryResult<any>) => {
         if (err) {
-            throw err;
+            console.error(err);
+            return null;
         }
-        console.log('Post with ID ${res.rows[0].postid} inserted.');
-        pool.end();
-        return res.rows[0].postid;
+        postid = res.rows[0].postid;
+        console.log('Post with ID ${postid} inserted.');    
     })
+    pool.end();
+    return postid;
 }

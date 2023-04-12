@@ -10,6 +10,9 @@ dependencies:
   '@astrojs/vercel':
     specifier: ^3.2.1
     version: 3.2.1(astro@2.1.9)(react@18.2.0)
+  '@types/pg':
+    specifier: ^8.6.6
+    version: 8.6.6
   astro:
     specifier: ^2.1.9
     version: 2.1.9
@@ -782,8 +785,20 @@ packages:
       '@types/unist': 2.0.6
     dev: false
 
+  /@types/node@18.15.11:
+    resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==}
+    dev: false
+
   /@types/parse5@6.0.3:
     resolution: {integrity: sha512-SuT16Q1K51EAVPz1K29DJ/sXjhSQ0zjvsypYJ6tlwVsRV9jwW5Adq2ch8Dq8kDBCkYnELS7N7VNCSB5nC56t/g==}
+    dev: false
+
+  /@types/pg@8.6.6:
+    resolution: {integrity: sha512-O2xNmXebtwVekJDD+02udOncjVcMZQuTEQEMpKJ0ZRf5E7/9JJX3izhKUcUifBkyKpljyUM6BTgy2trmviKlpw==}
+    dependencies:
+      '@types/node': 18.15.11
+      pg-protocol: 1.6.0
+      pg-types: 2.2.0
     dev: false
 
   /@types/resolve@1.20.2:
