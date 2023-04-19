@@ -1,9 +1,9 @@
 ---
 import { Thumbnail } from "../interfaces/Thumbnail";
 import { Image } from "@astrojs/image/components";
-// interface Props {
-//   post: Thumbnail;
-// }
+interface Props {
+  post: Thumbnail;
+}
 
 const { post } = Astro.props;
 ---
@@ -30,8 +30,18 @@ const { post } = Astro.props;
     </div>
     <div class="w-full h-auto border-b border-b-black">
       <h3 class="inline-block mr-5">Açılma Tarihi</h3>
-      <p id="creationdate" class="inline-block">{post.createdAt}</p>
+      <p id="creation-date" class="inline-block">{post.createdAt}</p>
     </div>
+    {
+      post.completedAt && (
+        <div class="w-full h-auto border-b border-b-black">
+          <h3 class="inline-block mr-5">Bitiş Tarihi</h3>
+          <p id="completion-date" class="inline-block">
+            {post.completedAt}
+          </p>
+        </div>
+      )
+    }
     <div class="w-full h-auto border-b border-b-black">
       <h3 class="inline-block mr-5">Durumu</h3>
       <p id="status" class="inline-block">{post.status}</p>
