@@ -1,7 +1,7 @@
 import { Pool, QueryResult } from 'pg'
-import { Animal } from './interfaces/Animal';
-import { User } from './interfaces/User';
-import { Post } from './interfaces/Post';
+import { Animal } from '@interfaces/Animal';
+import { User } from '@interfaces/User';
+import { Post } from '@interfaces/Post';
 const pool = new Pool();
 
 /**

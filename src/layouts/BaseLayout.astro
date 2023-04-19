@@ -1,5 +1,5 @@
 ---
-import "../../public/fonts/fontawesome-icons/css/all.css";
+import "@public/fonts/fontawesome-icons/css/all.css";
 import { Image } from "@astrojs/image/components";
 const { title, h1text } = Astro.props;
 ---
@@ -13,7 +13,7 @@ const { title, h1text } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <script>
-      import "../js/changeModeAuto";
+      import "@js/changeModeAuto";
     </script>
   </head>
   <body
@@ -80,7 +80,7 @@ const { title, h1text } = Astro.props;
       </section>
     </footer>
     <script>
-      import "../js/changeModeManual";
+      import "@js/changeModeManual";
     </script>
   </body>
 </html>
