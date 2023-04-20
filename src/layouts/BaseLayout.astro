@@ -49,12 +49,10 @@ const { title, h1text } = Astro.props;
     <footer class="border-inherit border-t-2 mb-5">
       <h2 class="text-center text-2xl font-bold my-3">Ekstra Kaynaklar</h2>
       <section id="foot-info" class="flex justify-around">
-        <article>
+        <article class="text-center">
           <h3 class="mb-5 font-bold text-2xl">Afet Yardım Haritaları</h3>
           <a href="https://afetharita.com/">
-            <figure
-              class="block border-inherit border w-[50%] hover:border-blue-400"
-            >
+            <figure class="block border-inherit border hover:border-blue-400">
               <Image
                 src={import(
                   /* @vite-ignore */ "../images/static/map-afetharita.jpg"

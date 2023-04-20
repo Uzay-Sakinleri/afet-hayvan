@@ -1,8 +1,8 @@
 ---
+import PostCard from "@components/PostCard.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
 import muckGenerate from "../../mock/scripts/muckGenerator";
-import PostCard from "../components/PostCard.astro";
 import { Thumbnail } from "../interfaces/Thumbnail";
-import BaseLayout from "../layouts/BaseLayout.astro";
 const muckThumbnails: Thumbnail[] | null = !!import.meta.env.DEV
   ? await muckGenerate(15)
   : null;
