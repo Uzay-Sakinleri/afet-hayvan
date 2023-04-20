@@ -1,6 +1,11 @@
 ---
 import PostCard from "@components/PostCard.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
+import muckGenerate from "../../mock/scripts/muckGenerator";
+import { Thumbnail } from "../interfaces/Thumbnail";
+const muckThumbnails: Thumbnail[] | null = !!import.meta.env.DEV
+  ? await muckGenerate(15)
+  : null;
 ---
 
 <BaseLayout h1text={"İlanlar"} title={"İlanlar"}>
@@ -8,5 +13,9 @@ import BaseLayout from "@layouts/BaseLayout.astro";
     class="grid gap-6 grid-rows-auto grid-cols-3 w-[80%] h-[auto] justify-items-center m-auto py-10 border-inherit"
   >
     <!-- <PostCard /> -->
+    {
+      muckThumbnails &&
+        muckThumbnails.map((muckPost) => <PostCard post={muckPost} />)
+    }
   </div>
 </BaseLayout>

@@ -30,14 +30,16 @@ const { post } = Astro.props;
     </div>
     <div class="w-full h-auto border-b border-b-black">
       <h3 class="inline-block mr-5">Açılma Tarihi</h3>
-      <p id="creation-date" class="inline-block">{post.createdAt}</p>
+      <p id="creation-date" class="inline-block">
+        {post.createdAt.toLocaleDateString()}
+      </p>
     </div>
     {
       post.completedAt && (
         <div class="w-full h-auto border-b border-b-black">
           <h3 class="inline-block mr-5">Bitiş Tarihi</h3>
           <p id="completion-date" class="inline-block">
-            {post.completedAt}
+            {post.completedAt.toLocaleDateString()}
           </p>
         </div>
       )
