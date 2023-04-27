@@ -23,6 +23,9 @@
       ],
       "@public/*": [
         "public/*"
+      ],
+      "@services/*": [
+        "services/*"
       ]
     }
   }

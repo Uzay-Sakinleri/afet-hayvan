@@ -1,36 +1,40 @@
-<div
-  class="hidden fixed inset-0 w-full h-full bg-[rgba(0,0,0,0.5)] z-1"
+<section
+  class="hidden place-content-center fixed inset-0 w-full h-full bg-[rgba(0,0,0,0.5)] z-1"
   id="auth_modal"
 >
   <div
-    class="bg-[#56457A] w-[600px] h-[500px] flex flex-col items-center justify-evenly gap-2 relative top-72 ml-[35vw] shadow-2xl shadow-gray-600"
+    class="bg-[#56457A] w-[600px] h-fit flex flex-col items-center justify-evenly gap-2 relative shadow-2xl shadow-gray-600"
+    id="login_div"
   >
     <span
-      class="text-3xl ml-auto mr-5 hover:cursor-pointer hover:opacity-75"
-      id="close_modal">X</span
+      class="text-3xl ml-auto mr-3 hover:cursor-pointer hover:opacity-75"
+      id="close_modal_login">X</span
     >
     <h4 class="text-gray-300 font-bold text-3xl">Giriş Yap</h4>
-    <form class="flex gap-6 flex-col text-center text-1xl mt-3">
-      <label for="u_email" class="block">Email</label>
+    <form class="flex gap-6 flex-col text-center text-1xl mt-3" id="login_form">
+      <label for="u_email_login" class="block">Email</label>
       <input
         type="email"
         name="u_email"
-        id="u_email"
+        id="u_email_login"
         class="block text-black"
       />
-      <label for="u_password" class="block">Şifre</label>
+      <label for="u_password_login" class="block">Şifre</label>
       <input
         type="password"
-        name="u_password"
-        id="u_password"
+        name="u_password_login"
+        id="u_password_login"
         class="block text-black"
       />
       <button
-        type="button"
+        type="submit"
         class="block border-white border-2 mt-5 hover:font-bold hover:bg-purple-800"
-        >Giriş Yap</button
+        id="login_btn">Giriş Yap</button
       >
-      <div class="flex flex-row-reverse gap-16 mt-9 [&>button>i]:text-4xl">
+      <div
+        class="flex flex-row-reverse gap-16 mt-5 [&>button>i]:text-4xl justify-center"
+        id="provider_area"
+      >
         <button id="facebook_login" type="button">
           <i class="fa-brands fa-facebook text-blue-600 hover:opacity-80"></i>
         </button>
@@ -42,13 +46,77 @@
           ></i></button
         >
         <button id="google_login" type="button">
-          <i class="fa-brands fa-google text-[#F37777] hover:opacity-80"
-          ></i></button
-        >
+          <i class="fa-brands fa-google text-[#F37777] hover:opacity-80"></i>
+        </button>
       </div>
+      <hr class="h-5" />
+      <span id="info-span" class="text-gray-200"
+        >Hesabın yok mu? Alttaki butona basarak yaratabilirsin</span
+      >
+      <button
+        type="button"
+        class="block border-white border-2 hover:font-bold hover:bg-green-800 mb-6"
+        id="register_form_btn">Hesap Oluştur</button
+      >
     </form>
   </div>
-</div>
-<script>
-  import "@ts/authenticate";
-</script>
+  <div
+    class="hidden bg-[#56457A] w-[600px] h-fit relative flex-col items-center justify-evenly gap-6 shadow-2xl shadow-gray-600"
+    id="register_div"
+  >
+    <span
+      class="text-3xl ml-auto mr-3 hover:cursor-pointer hover:opacity-75"
+      id="close_modal_register">X</span
+    >
+    <h4 class="text-gray-300 font-bold text-3xl">Hesap Oluştur</h4>
+    <form
+      class="flex gap-6 flex-col text-center text-1xl mt-3"
+      id="register_form"
+    >
+      <label for="u_email_register" class="block">Email</label>
+      <input
+        type="email"
+        name="u_email"
+        id="u_email_register"
+        class="block text-black"
+      />
+      <label for="u_password_register" class="block">Şifre</label>
+      <input
+        type="password"
+        name="u_password"
+        id="u_password_register"
+        class="block text-black"
+      />
+      <label for="u_password_repeat_register" class="block"
+        >Şifre Doğrulama</label
+      >
+      <input
+        type="password"
+        name="u_password"
+        id="u_password_repeat_register"
+        class="block text-black"
+      />
+      <button
+        type="submit"
+        class="block border-white border-2 mt-5 hover:font-bold hover:bg-purple-800"
+        id="register_btn"
+        >Kayıt Ol
+      </button>
+      <hr class="mt-5" />
+      <span id="info-span" class="text-gray-200"
+        >Hesabın var mı? Alltaki butona tıklayarak giriş yapabilirsin</span
+      >
+      <button
+        type="button"
+        class="block border-white border-2 hover:font-bold hover:bg-green-800 mb-6"
+        id="login_form_btn"
+      >
+        Giriş Yap
+      </button>
+    </form>
+  </div>
+  <script>
+    import "@services/firebase/auth";
+    import "@ts/authModal";
+  </script>
+</section>
