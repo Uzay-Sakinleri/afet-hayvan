@@ -27,7 +27,7 @@ const providerButtons = providerArea.querySelectorAll("button");
 const auth = getAuth(app);
 auth.useDeviceLanguage();
 // Start emulator if env is development
-if(env.PROD)
+if(env.DEV)
 connectAuthEmulator(auth, "http://localhost:9099");
 // Login with third party providers
 providerButtons.forEach(e => e.addEventListener("click", function(this) { popUpper(this.id) }));
