@@ -8,5 +8,8 @@ import node from "@astrojs/node";
 export default defineConfig({
   integrations: [tailwind(), image()],
   output: "server",
-  adapter: process.env.NODE ? node({mode: "middleware"}) : vercel()
+  adapter: process.env.NODE ? node({mode: "middleware"}) : vercel(),
+  image: {
+    service: process.env.NODE ? "astro/assets/services/sharp": "astro/assets/services/squoosh"
+  }
 });
