@@ -64,7 +64,7 @@ loginForm.addEventListener("submit", async function(this, e) {
   const email = this.querySelector<HTMLInputElement>("#u_email_login").value;
   const password = this.querySelector<HTMLInputElement>("#u_password_login").value;
   try {
-    const credentials = await signInWithEmailAndPassword(auth, email, password);
+    const credentials = await signInWithEmailAndPassword(auth, email.trim(), password.trim());
     if (credentials.user.emailVerified) {
       displayGoodResult(this, "login");
       setTimeout(() => {
@@ -95,7 +95,7 @@ registerForm.addEventListener("submit", async function(this, e) {
   }
   else {
     try {
-      const credentials = await createUserWithEmailAndPassword(auth, email, password);
+      const credentials = await createUserWithEmailAndPassword(auth, email.trim(), password.trim());
       await sendEmailVerification(credentials.user);
       displayGoodResult(this, "register");
       await signOut(auth);
