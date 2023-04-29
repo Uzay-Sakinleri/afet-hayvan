@@ -17,8 +17,12 @@ import {
   providerArea,
   loginForm,
   registerForm,
-  authModal
+  authModal,
+  registerDiv,
+  loginDiv
 } from "@ts/authModal";
+
+import { displayError, displayGoodResult } from "@utils/firebaseResultHandler";
 
 const env = import.meta.env;
 // HTML Elements
@@ -27,12 +31,12 @@ const providerButtons = providerArea.querySelectorAll("button");
 const auth = getAuth(app);
 auth.useDeviceLanguage();
 // Start emulator if env is development
-if(env.DEV)
-connectAuthEmulator(auth, "http://localhost:9099");
+if (env.DEV)
+  connectAuthEmulator(auth, "http://localhost:9099");
 // Login with third party providers
-providerButtons.forEach(e => e.addEventListener("click", function(this) { popUpper(this.id) }));
+providerButtons.forEach(e => e.addEventListener("click", function(this) { popUpper(this.form,this.id) }));
 
-async function popUpper(id: string) {
+async function popUpper(form:HTMLFormElement, id: string) {
   const provider = id.substring(id.indexOf("_"), -1);
   let provInstance: FacebookAuthProvider | GoogleAuthProvider | OAuthProvider | TwitterAuthProvider;
   switch (provider) {
@@ -43,11 +47,14 @@ async function popUpper(id: string) {
   }
   try {
     await signInWithPopup(auth, provInstance);
+    displayGoodResult(form, "login");
+    setTimeout(() => {
     authModal.classList.replace("grid", "hidden");
+    }, 5000);
 
   }
   catch (e) {
-    console.error(e)
+    displayError(e, loginForm, provider);
   }
 }
 
@@ -57,19 +64,22 @@ loginForm.addEventListener("submit", async function(this, e) {
   const email = this.querySelector<HTMLInputElement>("#u_email_login").value;
   const password = this.querySelector<HTMLInputElement>("#u_password_login").value;
   try {
-    const credentials = await signInWithEmailAndPassword(auth, email, password);
+    const credentials = await signInWithEmailAndPassword(auth, email.trim(), password.trim());
     if (credentials.user.emailVerified) {
-      this.querySelectorAll("input").forEach(e => e.value = "");
-      authModal.classList.replace("grid", "hidden");
+      displayGoodResult(this, "login");
+      setTimeout(() => {
+        authModal.classList.replace("grid", "hidden");
+        this.querySelectorAll("input").forEach(e => e.value = "");
+        this.querySelector(".result").remove();
+      }, 5000);
     }
     else {
-      // Going to add error and display from the form with some spans but for now, just alert the user.
-      alert("Email adresinizi doğrulamamışsınız. Lütfen email adresinizi doğruladıktan sonra giriş yapınız.");
+      displayError(new Error("email-not-verified"), this);
       signOut(auth);
     }
   }
   catch (e) {
-    console.error(e);
+    displayError(e, this);
   }
 });
 
@@ -79,18 +89,25 @@ registerForm.addEventListener("submit", async function(this, e) {
   const password = this.querySelector<HTMLInputElement>("#u_password_register").value;
   const passwordRepeat = this.querySelector<HTMLInputElement>("#u_password_repeat_register").value;
   if (!(password === passwordRepeat))
-    // Going to add validation error messages and more validation. For now, just alert the user.
-    alert("Şifre ve Şifre Doğrulama'nız aynı değil, lütfen tekrardan kontrol edin.");
+    displayError(new Error("password-passwordrepeat-not-same"), this);
+  else if (email == "" || password == "") {
+    displayError(new Error("email-or-and-password-missing"), this);
+  }
   else {
     try {
-      const credentials = await createUserWithEmailAndPassword(auth, email, password);
-      authModal.classList.replace("grid", "hidden");
+      const credentials = await createUserWithEmailAndPassword(auth, email.trim(), password.trim());
       await sendEmailVerification(credentials.user);
-      this.querySelectorAll("input").forEach(e => e.value = "");
+      displayGoodResult(this, "register");
       await signOut(auth);
+      setTimeout(() => {
+        registerDiv.classList.replace("flex", "hidden");
+        loginDiv.classList.replace("hidden", "flex");
+        this.querySelectorAll("input").forEach(e => e.value = "");
+        this.querySelector(".result").remove();
+      }, 5000);
     }
     catch (e) {
-      console.error(e);
+      displayError(e, this);
     }
   }
 });

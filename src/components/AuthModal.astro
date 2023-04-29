@@ -1,9 +1,9 @@
 <section
-  class="hidden place-content-center fixed inset-0 w-full h-full bg-[rgba(0,0,0,0.5)] z-1"
+  class="hidden place-content-center fixed inset-0 w-full h-full bg-[rgba(0,0,0,0.5)] z-1 [&>div>form>span.result]:text-left [&>div>form>span.error]:text-red-500 [&>div>form>span.succes]:text-green-500 [&>div>form>span.result]:font-[700] [&>div>form>span.result]:text-[17px] [&>div>form>span.result]:w-[434px]"
   id="auth_modal"
 >
   <div
-    class="bg-[#56457A] w-[600px] h-fit flex flex-col items-center justify-evenly gap-2 relative shadow-2xl shadow-gray-600"
+    class="flex bg-[#56457A] w-[600px] h-fit flex-col items-center justify-evenly gap-2 relative shadow-2xl shadow-gray-600"
     id="login_div"
   >
     <span
@@ -11,7 +11,10 @@
       id="close_modal_login">X</span
     >
     <h4 class="text-gray-300 font-bold text-3xl">Giriş Yap</h4>
-    <form class="flex gap-6 flex-col text-center text-1xl mt-3" id="login_form">
+    <form
+      class="flex gap-6 flex-col text-center text-1xl mt-3 w-fit"
+      id="login_form"
+    >
       <label for="u_email_login" class="block">Email</label>
       <input
         type="email"
