@@ -1,0 +1,54 @@
+<div
+  class="hidden fixed inset-0 w-full h-full bg-[rgba(0,0,0,0.5)] z-1"
+  id="auth_modal"
+>
+  <div
+    class="bg-[#56457A] w-[600px] h-[500px] flex flex-col items-center justify-evenly gap-2 relative top-72 ml-[35vw] shadow-2xl shadow-gray-600"
+  >
+    <span
+      class="text-3xl ml-auto mr-5 hover:cursor-pointer hover:opacity-75"
+      id="close_modal">X</span
+    >
+    <h4 class="text-gray-300 font-bold text-3xl">Giriş Yap</h4>
+    <form class="flex gap-6 flex-col text-center text-1xl mt-3">
+      <label for="u_email" class="block">Email</label>
+      <input
+        type="email"
+        name="u_email"
+        id="u_email"
+        class="block text-black"
+      />
+      <label for="u_password" class="block">Şifre</label>
+      <input
+        type="password"
+        name="u_password"
+        id="u_password"
+        class="block text-black"
+      />
+      <button
+        type="button"
+        class="block border-white border-2 mt-5 hover:font-bold hover:bg-purple-800"
+        >Giriş Yap</button
+      >
+      <div class="flex flex-row-reverse gap-16 mt-9 [&>button>i]:text-4xl">
+        <button id="facebook_login" type="button">
+          <i class="fa-brands fa-facebook text-blue-600 hover:opacity-80"></i>
+        </button>
+        <button id="twitter_login" type="button">
+          <i class="fa-brands fa-twitter text-sky-400 hover:opacity-80"></i>
+        </button>
+        <button id="microsoft_login" type="button">
+          <i class="fa-brands fa-microsoft text-orange-400 hover:opacity-80"
+          ></i></button
+        >
+        <button id="google_login" type="button">
+          <i class="fa-brands fa-google text-[#F37777] hover:opacity-80"
+          ></i></button
+        >
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  import "@ts/authenticate";
+</script>
