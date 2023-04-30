@@ -1,10 +1,10 @@
-import {User } from "./User";
 import { Animal } from "./Animal";
 
 export interface Post {
-  postId: number;
-  name: string;
-  user: User;
+  postID: number;
+  userID: number;
+  title: string;
+  content: string;
   animal: Animal;
   createdAt: Date;
   completedAt?: Date;
