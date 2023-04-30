@@ -1,12 +1,10 @@
-import { Appearance } from "./Appearance";
-import { Breed } from "./Breed";
-import { Specie } from "./Specie";
-
 export interface Animal {
-  animalId: number;
+  animalID: number;
   name: string;
-  appearance: Appearance;
-  breed: Breed;
-  specie: Specie;
+  furColor: string;
+  eyeColor: string;
+  accessory: string;
+  breed: string;
+  species: string;
   imagePath: string;
 }
