@@ -1,10 +1,12 @@
 import { Pool } from 'pg'
+import { loadEnv } from "vite";
+const env = loadEnv(import.meta.env.MODE, process.cwd(), "" );
 
 const pool = new Pool({
-    user: 'bolkareren',
-    host: 'localhost',
-    database: 'afethayvan_test',
-    port: 5432,
+    user: env.PGUSER,
+    host: env.PGHOST,
+    database: env.PGDATABASE,
+    password: env.PGPASSWORD
 } 
 );
 

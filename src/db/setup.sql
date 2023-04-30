@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS ANIMAL;
 
 CREATE TABLE PUBLIC.ANIMAL(
     ANIMALID SERIAL PRIMARY KEY,
-    NAME VARCHAR(30) NOT NULL,
+    ANIMALNAME VARCHAR(30) NOT NULL,
     FURCOLOR VARCHAR(30) NOT NULL,
     EYECOLOR VARCHAR(30) NOT NULL,
     ACCESSORY TEXT NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE PUBLIC.ANIMAL(
 
 CREATE TABLE PUBLIC.POST(
     POSTID SERIAL PRIMARY KEY,
-    ANIMALID INTEGER REFERENCES ANIMAL(ANIMALID),
+    ANIMALID INTEGER REFERENCES ANIMAL(ANIMALID) ON DELETE CASCADE,
     USERID INTEGER NOT NULL,
     TITLE VARCHAR(40) NOT NULL,
     CONTENT TEXT,
@@ -29,7 +29,7 @@ CREATE TABLE PUBLIC.POST(
 );
 
 INSERT INTO ANIMAL (
-    NAME,
+    ANIMALNAME,
     FURCOLOR,
     EYECOLOR,
     ACCESSORY,
@@ -44,6 +44,37 @@ INSERT INTO ANIMAL (
     'something',
     'something',
     'something'
+),
+(
+    'Gumus',
+    'gri',
+    'sari',
+    'stuff',
+    'something',
+    'something',
+    'something'
 );
 
-INSERT INTO POST (animalid, userid, title, content, completedat, status) VALUES (1, 100, 'kayip', NULL, NULL, 'active');
+INSERT INTO POST (
+    ANIMALID,
+    USERID,
+    TITLE,
+    CONTENT,
+    COMPLETEDAT,
+    STATUS
+) VALUES (
+    1,
+    100,
+    'kayip',
+    NULL,
+    NULL,
+    'active'
+),
+(
+    2,
+    100,
+    'kayip',
+    NULL,
+    NULL,
+    'active'
+);

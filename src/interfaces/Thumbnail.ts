@@ -1,9 +1,7 @@
 export interface Thumbnail {
-    postID: number;
+    postid: number;
     title: string;
-    animalName: string;
-    imagePath: string;
-    createdAt: Date;
-    completedAt?: Date;
+    name: string;
+    imagepath: string;
     status: string;
   }
