@@ -1,12 +1,12 @@
 import { Animal } from "./Animal";
 
 export interface Post {
-  postID: number;
-  userID: number;
+  postid: number;
+  userid: number;
   title: string;
   content: string;
   animal: Animal;
-  createdAt: Date;
-  completedAt?: Date;
+  createdat: Date;
+  completedat?: Date;
   status: string;
 }

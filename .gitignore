@@ -25,3 +25,6 @@ pnpm-debug.log*
 firebase.json
 firebase-debug.log
 ui-debug.log
+
+# VS CODE
+.vscode/*

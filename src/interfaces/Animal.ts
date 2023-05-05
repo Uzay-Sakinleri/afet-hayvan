@@ -1,10 +1,10 @@
 export interface Animal {
-  animalID: number;
-  name: string;
-  furColor: string;
-  eyeColor: string;
+  animalid: number;
+  animalname: string;
+  furcolor: string;
+  eyecolor: string;
   accessory: string;
   breed: string;
   species: string;
-  imagePath: string;
+  imagepath: string;
 }

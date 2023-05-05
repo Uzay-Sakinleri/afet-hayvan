@@ -2,6 +2,7 @@ import { QueryResult } from 'pg'
 import { Animal } from '../interfaces/Animal';
 import { Post } from '../interfaces/Post';
 import pool from './pool';
+import { Thumbnail } from '@interfaces/Thumbnail';
 
 
 /**
@@ -11,22 +12,15 @@ import pool from './pool';
  */
 export async function getAnimal(animalid: number): Promise<Animal | Error> {
     // Creating variables animal and query for storing animal and query variables
-    let animal:Animal;
     const query = {
-        text: 'SELECT * FROM animals WHERE animalid = $1',
+        text: 'SELECT * FROM animal WHERE animalid = $1',
         values: [animalid],
     };
 
     // Executing query for getting variables of the animal
     try {
-        let result = await pool.query(query);
-        animal.animalID = animalid;
-        animal.name = result.rows[0].name;
-        animal.furColor = result.rows[0].furcolor;
-        animal.eyeColor = result.rows[0].eyecolor;
-        animal.breed = result.rows[0].breed;
-        animal.species = result.rows[0].species;
-        animal.accessory = result.rows[0].accessory;
+        const result = await pool.query(query);
+        const animal = result.rows[0] as Animal;
         return animal 
     } catch (error) {
         return error
@@ -40,29 +34,19 @@ export async function getAnimal(animalid: number): Promise<Animal | Error> {
  */
 export async function getPost(postid: number): Promise<Post|Error> {
     // Creating variables post and query for storing post and query variables
-    let post:Post;
     const query = {
-        text: 'SELECT * FROM posts WHERE postid = $1',
+        text: 'SELECT * FROM post WHERE postid = $1',
         values: [postid],
     };
 
     // Executing query for getting variables of the post
     try {
-        let result = await pool.query(query);
-        let animal = await getAnimal(result.rows[0].animalid);
-        post.postID = postid
-        post.userID = result.rows[0].userID;
-        post.title = result.rows[0].title;
-        post.content = result.rows[0].content;
-        post.createdAt = result.rows[0].createdAt;
-        post.completedAt = result.rows[0].completedAt;
-        post.status = result.rows[0].status;
-        if (animal instanceof Error){
-            return animal
-        }
-        else{ 
-            post.animal = animal;
-        }
+        const result = await pool.query(query);
+        const animalid = result.rows[0].animalid;
+        delete result.rows[0].animalid;
+        const post = result.rows[0] as Post;
+        const animal = await getAnimal(animalid) as Animal;
+        post.animal = animal;
         return post;
     } catch (error) {
         return error
@@ -73,17 +57,30 @@ export async function getPost(postid: number): Promise<Post|Error> {
  * Get all the thumbnails from the database
  * @returns Returns list of Thumbnails in groups of nine
  */
-export async function getAllThumbnails(): Promise<QueryResult> {
+export async function getAllThumbnails(): Promise<Thumbnail[][]> {
     // Create variable query for storing query variables
     const query = {
-        text: 'SELECT postid, posts.name AS title, animals.name AS animalName, animals.path AS imagePath, createdAt, completedAt, status FROM users NATURAL JOIN posts NATURAL JOIN animals',
+        text: 'SELECT postid, title, status, animalname, imagepath FROM post NATURAL JOIN animal',
     };
 
     // Executing query for getting thumbnails from posts
     try {
         let result = await pool.query(query);
-        // TODO: Need to divide the result into groups of nine
-        return result;
+        let thumbnails:Array<Array<Thumbnail>> = [];
+        let i = 0;
+        let new_array:Array<Thumbnail> = [];
+        while (i < result.rowCount) {
+            new_array.push(result.rows[i] as Thumbnail)
+            if ((i + 1) % 9 == 0){
+                thumbnails.push(new_array.slice());
+                new_array = [];
+            }
+            i = i + 1
+        }
+        if ((result.rowCount + 1) % 9 != 0){
+            thumbnails.push(new_array);
+        }
+        return thumbnails;
     } catch (error) {
         return error
     }
@@ -97,8 +94,8 @@ export async function getAllThumbnails(): Promise<QueryResult> {
 export async function updateAnimal(animal: Animal): Promise<boolean> {
     // Create Pool in order to execute queries
     const query = {
-        text: 'UPDATE animals SET name = $1, furColor = $2, eyeColor = $3, accessory = $4, breed = $5, species = $6, imagePath = $7 WHERE animalID = $8',
-        values: [animal.name, animal.furColor, animal.eyeColor, animal.accessory, animal.breed, animal.species, animal.imagePath, animal.animalID],
+        text: 'UPDATE animal SET animalname = $1, furcolor = $2, eyecolor = $3, accessory = $4, breed = $5, species = $6, imagePath = $7 WHERE animalID = $8',
+        values: [animal.animalname, animal.furcolor, animal.eyecolor, animal.accessory, animal.breed, animal.species, animal.imagepath, animal.animalid],
     };
     
     // Executing query for updating the values of the animal with animalid
@@ -113,12 +110,13 @@ export async function updateAnimal(animal: Animal): Promise<boolean> {
 export async function updatePost(post: Post): Promise<boolean> {
     // Create Pool in order to execute queries
     const query = {
-        text: 'UPDATE posts SET title = $1, completedAt = $2, status = $3 WHERE postid = $4',
-        values: [post.title, post.completedAt,post.status],
+        text: 'UPDATE post SET userid = $1, title = $2, content = $3, completedat = $4, status = $5 WHERE postid = $6',
+        values: [post.userid, post.title, post.content, post.completedat, post.status, post.postid],
     };
 
     // Executing query for updating the values of the post with postid
     try {
+        await updateAnimal(post.animal)
         await pool.query(query)
         return true
     } catch (error) {
@@ -130,15 +128,14 @@ export async function insertAnimal(animal: Animal): Promise<number | null> {
 
     // Create Pool in order to execute queries
     const query = {
-        text: 'INSERT INTO animals (name, furcolor, eyecolor, accessory, breed, species, imagepath) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING animalid',
-        values: [animal.name, animal.furColor, animal.eyeColor, animal.breed, animal.species, animal.imagePath]
+        text: 'INSERT INTO animal (animalname, furcolor, eyecolor, accessory, breed, species, imagepath) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING animalid',
+        values: [animal.animalname, animal.furcolor, animal.eyecolor, animal.accessory, animal.breed, animal.species, animal.imagepath]
     }
-    let animalid:number;
     
     // Executing query for inserting the new values of the animal
     try {
         let result = await pool.query(query);
-        animalid = result.rows[0];
+        const animalid = result.rows[0].animalid;
         return animalid
     } catch (error) {
         return error
@@ -152,21 +149,32 @@ export async function insertAnimal(animal: Animal): Promise<number | null> {
  * @returns {Promise<number | null>} ID of the inserted post.
  */
 export async function insertPost(post: Post): Promise<number | null> {
-    
     // Creating variables for queries to be executed and postid to be returned
-    let postid:number;
     const query = {
-        text: 'INSERT INTO posts (animalid, userid, title, content, createdat, completedat, status) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING postid',
-        values: [post.animal.animalID, post.userID, post.title, post.content, post.createdAt, post.completedAt, post.status],
+        text: 'INSERT INTO post (animalid, userid, title, content, status) VALUES ($1, $2, $3, $4, $5) RETURNING postid',
+        values: [post.animal.animalid, post.userid, post.title, post.content, post.status],
     };
 
-    // Executing query for inserting the new values into post 
-    // TODO: Make this into a transaction since we want to make sure both animal and post is inserted
     try {
+        await insertAnimal(post.animal)
         let result = await pool.query(query);
-        postid = result.rows[0].postid;
+        const postid = result.rows[0].postid;
         return postid;
     } catch (error) {
         return error;
+    }
+}
+
+export async function deleteAnimal(animalid: number) {
+    const query = {
+        text: 'DELETE FROM animal WHERE animalid = $1',
+        values: [animalid]
+    }
+
+    try {
+        await pool.query(query)
+        return true
+    } catch (error) {
+        return error
     }
 }
